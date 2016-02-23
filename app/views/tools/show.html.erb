@@ -1,0 +1,8 @@
+<h1><%= @tool.name %> - <%= @tool.quantity %></h1>
+$<%= @tool.formatted_price %>
+<p>
+  <%= link_to("Destroy #{@tool.name}", tool_path(@tool), method: "delete") %>
+</p>
+<p>
+  <%= link_to("Update #{@tool.name}", edit_tool_path(@tool)) %>
+</p>
