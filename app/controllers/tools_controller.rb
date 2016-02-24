@@ -1,5 +1,4 @@
 class ToolsController < ApplicationController
-  helper_method :most_recent_tool
 
   def index
     @tools = Tool.all
@@ -15,8 +14,10 @@ class ToolsController < ApplicationController
 
   def create
     @tool = Tool.new(tool_params)
+    @category_options = Category.all.map{|c| [c.name, c.id]}
+
     if @tool.save
-      session[:most_recent_tool_id] = @tool.id
+      current_user.tools << @tool
       flash.notice = "Tool #{@tool.name} successfully created!"
       redirect_to tool_path(@tool.id)
     else
@@ -42,7 +43,11 @@ class ToolsController < ApplicationController
   def destroy
     @tool = Tool.find(params[:id])
     @tool.destroy
+    if session[:most_recent_tool_id] == @tool.id # need to clear session if tool is deleted right after being created
+      session[:most_recent_tool_id] = nil
+    end
     redirect_to tools_path
+
   end
 
   private

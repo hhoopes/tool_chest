@@ -5,5 +5,8 @@
   <%= f.text_field :price %>
   <p><%= f.label :quantity %>
   <%= f.text_field :quantity %>
+  <p>
+    <%= f.select(:category_id, Category.all.collect{|f| [ "#{f.name}", f.id]}) %>
+  </p>
   <p><%= f.submit %>
 <% end %>
