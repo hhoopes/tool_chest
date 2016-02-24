@@ -1,13 +1,13 @@
 Rails.application.routes.draw do
   root to: "tools#index"
-  resources :tools
-  resources :users, only: [:new, :create, :show]
+  resources :users, only: [:new, :create, :show] do
+    resources :tools
+    resources :categories, only: [:index, :show]
+  end
 
   namespace "admin" do
     resources :categories, only: [:new, :create, :edit, :update, :destroy]
   end
-
-  resources :categories, only: [:index, :show]
 
 
 
