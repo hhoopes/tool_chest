@@ -1,6 +1,5 @@
 
-<% if current_user %>
-<% current_user.tools.each do |tool| %>
+<% @tools.each do |tool| %>
   <p><%= link_to(tool.name, tool_path(tool))  %> -  <%= tool.quantity %></p>
 <% end %>
 <% end %>

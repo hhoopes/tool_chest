@@ -1,5 +1,4 @@
-class ToolsController < ApplicationController
-
+class Admin::ToolsController <ApplicationController
   def index
     @tools = Tool.all
   end
@@ -19,11 +18,10 @@ class ToolsController < ApplicationController
     if @tool.save
       current_user.tools << @tool
       flash.notice = "Tool #{@tool.name} successfully created!"
-      redirect_to tool_path(@tool.id)
+      redirect_to admin_tool_path(@tool.id)
     else
       flash.alert = "#{@tool.errors.full_messages.join(", ")}"
       render :new
-
     end
   end
 
@@ -32,10 +30,9 @@ class ToolsController < ApplicationController
   end
 
   def update
-    @user = User.find(params[:user_id])
     @tool = Tool.find(params[:id])
     if @tool.update(tool_params)
-      redirect_to tool_path(@tool)
+      redirect_to admin_tool_path(@tool)
     else
       render :edit
     end
@@ -46,14 +43,15 @@ class ToolsController < ApplicationController
     @tool.destroy
     # if session[:most_recent_tool_id] == @tool.id # need to clear session if tool is deleted right after being created
     #   session[:most_recent_tool_id] = nil
-    end
-    redirect_to tools_path
-
+    # else
+      redirect_to admin_tools_path
+    # end
   end
 
-  private
+    private
 
   def tool_params
     params.require(:tool).permit(:name, :quantity, :price)
   end
+
 end
