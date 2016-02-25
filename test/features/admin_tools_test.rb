@@ -33,4 +33,24 @@ class AdminCanAddViewDeleteToolsTest <ActionDispatch::IntegrationTest
     assert page.has_content?("jackhammer")
     assert page.has_content?("rasp")
   end
+
+  test "admin can delete any tool" do
+    user = User.create(username: "JillUser", password: "123", role: 0)
+    user.tools << Tool.create(name: "jackhammer", price: 33, quantity: 3)
+    admin = User.create(username: "admin", password: "123", role: 1)
+
+    ApplicationController.any_instance.stubs(:current_user).returns(admin)
+    tool = Tool.last
+    visit admin_tool_path(tool)
+
+    click_link_or_button "Delete"
+    assert_equal admin_tools_path, current_path
+
+    admin.tools << Tool.create(name: "rasp", price: 33, quantity: 3)
+    tool = Tool.last
+    visit admin_tool_path(tool)
+
+    click_link_or_button "Delete"
+    assert_equal admin_tools_path, current_path
+  end
 end
